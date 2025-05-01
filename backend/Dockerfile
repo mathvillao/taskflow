@@ -3,7 +3,7 @@ FROM node:18
 WORKDIR /app                        
 # Aqui é o diretório que o container vai trabalhar
 
-COPY packege*.json ./               
+COPY package*.json ./          
 # Aqui ele vai copiar os arquivos de configuração e todas as dependências com install
 RUN npm install                     
 # Aqui ele vai instalar todas as dependências
