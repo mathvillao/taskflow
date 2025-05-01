@@ -1,0 +1,119 @@
+Este relatório apresenta o passo a passo das etapas que executei ao longo dos dias, pois dividi o projeto em pequenas partes para realizá-las gradualmente. 
+Essa abordagem me permitiu aprender e observar com mais atenção cada aspecto do conteúdo, garantindo uma compreensão mais detalhada.
+
+Projeto: Gerenciador de Tarefas Colaborativo (Tipo Trello simplificado)
+
+O nome da aplicação será: Taskflow
+Um app onde múltiplos usuários podem criar quadros, lista e cartões com tarefas, idela para testar todas as coisas que esse projeto terá:
+Backend RESTful
+Frontend interativo com autenticação
+Banco de dados relacional
+Deploy em nuvem com Docker
+Versionamento com Git + GitHub
+CI/CD
+
+Com essa apresentação do projeto e do que vai envolver ele, podemos dar inicio a cada etapa de explicação.
+Onde deixarei muito claro como funciona cada coisa, para realmente aprender do 0 todas as coisas.
+
+Etapa 1: Planejamento e Setup Inicial
+
+Objetivo de hoje
+1. Criar uma conta no GitHub (se ainda não tiver)
+2. Criar um repositório do projeto
+3. Instalar ferramentas básicas no seu computador
+4. Criar a estrutura incial de pastas
+5. Fazer o primeiro commit no GitHub
+
+1 Criar uma conta no GitHub
+
+Se ainda não tem conta, siga os passos:
+1. Acesse: http://github.com
+2. Clique em "Sign uo"
+3. Crie um nome de usuário, email e senha
+4. Confirme o email que o GitHub te enviar
+
+2 Instalar ferramentas no seu computador
+
+Git: https://git-scm.com/
+Node.js (com npm): https://nodejs.org/en
+Docker Desktop: https://www.docker.com/products/docker-desktop
+VS Code: https://code.visualstudio.com/
+
+3 Criar o repositório no GitHub
+1. Acesse https://github.com
+2. Vá no menu superior e clique no botão + -> New repository
+3. Preencha assim:
+Repository name: taskflow
+Description: Projeto full-stack completo com Docker e nuvem
+Visibility: Public ou Private
+Marque a opção: Add a REDME file 
+Clique em Create repository
+4. Após criado, clique no botão verde Code e copie o link HTTPS, algo como:
+https://github.com/seu-usuario/taskflow.git
+
+4 Clonar o repositório no seu computador/VS Code
+1. Faça um diretório com o nome:
+Projeto Full-stack
+2. Abra o diretório no VS Code:
+Clique na aba File
+Após isso clique em Open folder
+E coloque o diretórioqie você criou com o nome: Projeto Full-Stack
+3. Agora abrimos um terminal
+Clique na aba Terminal
+Após isso clique em New terminal
+4. Abrir um terminal Git bash
+Clique no canto superior direito no botão de +
+Após isso selecione o Git bash
+5. Agora vamos clonar o repositório
+git clone https://github.com/seu-usuario/taskflow.git
+cd taskflow
+
+5 Criar a estrutura de diretórios do projeto
+No terminal vamos criar os diretórios de Backend e Frontend:
+bash:
+mkdir backend
+mkdir frontend
+E para conseguirmos subir para o GitHub, precisamos adicionar um conteúdo dentro do diretório se não, eçe não é reconhecido
+No terminal bash:
+cd backend
+echo "# Backend" > README.md
+cd ..
+cd frontend
+echo "# Frontend" > README.md
+
+6 Subir para o GitHub (primeiro commit)
+No terminal bash:
+Colocamos os nossos dados do GitHub
+git config --global user.name "seu-nome"
+git config --global user.email "seu-email-do-github"
+Utilizamos um comando para verificar se realmente deu certo a configuração que aplicamos:
+git config --list
+Deve aparecer algo como:
+user.name=seu-nome
+user.email=seu-email-do-github
+Após isso para validar que podemos commitar as alterações que fizemos adicionando os diretórios ao projeto, colocamos no terminal:
+git status
+Ele deve mostrar algo como:
+Untracked files:
+    backend/
+    frontend/
+Isso significa que deu certo e agora podemos ir para a parte de subir para o GitHub
+No terminal:
+git add .
+Esse comando vai adicionar todos os arquivos novos e modificados
+git commit -m "feat: adicionando estrutura inicial de backend e frontend"
+Esse comando vai colocar a mensagem no commit
+git push origin main
+Esse comando vai enviar para o GitHub as alterações
+
+7 Verifique no GitHub
+Depois disso, atualize a página que está o seu projeto no GitHub e verá os diretórios backend e frontend aparecendo lá.
+
+Etapa 2: Iniciando o Backend com Docker e PsotgreSQL
+
+Será dividido em 4 partes, cada um terá código + explicação detalhada:
+1. Criar o projeto backend com Node.js e Express
+2. Criar um Dockerfile (como empacotar o backend)
+3. Criar o docker-compose.yal (como conectar serviços - app + banco)
+4. Subir tudo e testar
+
