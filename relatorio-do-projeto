@@ -117,3 +117,143 @@ Será dividido em 4 partes, cada um terá código + explicação detalhada:
 3. Criar o docker-compose.yal (como conectar serviços - app + banco)
 4. Subir tudo e testar
 
+1 Criando o backend com Node.js e Express
+1 - npm init -y
+Esse comando cria um arquivo chamado package.json onde ficam as configurações básicas do seu projeto Node.js
+Entramos no diretório do backend primeiro e depois colocamos o comando:
+cd backend
+npm init -y
+
+Explicando um pouco o comando:
+npm = Node Package Manager
+init = inicia um novo projeto
+-y = aceita as configurações padrão
+
+Após isso veremos o arquivo package.json sendo criado dentro do diretório backend
+Esse arquivo serve para controlar as dependências e scripts do projeto
+
+2 - Instalando o Express
+npm install express
+
+O Express é um framework web do Node.js, onde nos ajuda a criar APIs com poucas linhas de código
+Após a instalação do express pode ser observado dentro do arquivo package.json o pacote instalado
+
+3 - Criar uma estrutura para colocar os códigos
+mkdir src
+acho > src/index.js
+
+A pasta com o nome de src tem o significado de source que é origem, onde colocamos nossos códigos
+E o index.js que será o arquivo de entrada para o nosso servidor
+
+4 - Agora vamos colocar o conteúdo dentro do arquivo index.js - src/index.js
+index.js:
+const express = require('express');    // Importa o Express
+const app = express();                 // Cria ums instância da aplicação
+const PORT = process.env.PORT || 3000; // Definindo a porta que vai ser utilizada
+
+app.get('/health', (req, res) => {     // Cria uma rota GET em /health
+    res.send('API is healthy!');       // Responde com uma mensagem de texto
+});
+
+app.listen(PORT, () => {               // Iniciando o servidor
+    console.log(`Server is running on port ${PORT}`);
+});
+
+Resuminho da lógica:
+Cria um mini-servidor
+Quando alguém acessar http://localhost:3000/health, ele responde: "API is healthy!"
+E por fim o listen inicia o servidor na porta configurada
+
+2 Criando o Dockerfile
+Agora vamos aprender como o Docker funciona um pouco em linha de código, para saber na teoria como ele funciona vou deixar um link para vocês entenderem melhor como o docker funciona na teoria.
+Aqui o nosso arquivo Docker vai empacotar e rodar o backend.
+Ainda na pasta backend, crie o arquivo chamado Dockerfile
+echo> Dockerfile
+E conteúdo para ele, está abaixo:
+FROM node:18                        
+# Aqui ele pega a imagem do Node.js oficial e pega a versão 18
+WORKDIR /app                        
+# Aqui é o diretório que o container vai trabalhar
+
+COPY package*.json ./          
+# Aqui ele vai copiar os arquivos de configuração e todas as dependências com install
+RUN npm install                     
+# Aqui ele vai instalar todas as dependências
+
+COPY . .                            
+# Aqui vai copiar todo projeto
+EXPOSE 3000                         
+# Aqui vai expor a porta 3000
+CMD [ "node", "src/index.js" ]
+# E por fim esse é o comando que roda a API
+
+O que isso faz?
+1. Baixar uma imagem com Node.js instalado
+2. Criar um container ("caixa") com seu código
+3. Instalar as dependências
+4. Rodar seu servidor no index.js
+
+Coloquei o código inteiramente comentado para que vocês possam ter a compreensão de o que cada linha do código faz, para de fato aprenderem tudo detalhadamente.
+
+3 Criar o docker-compose.yml
+Agora vamos voltar a raiz do projeto (taskflow) e criar o arquivo:
+Para voltar a raiz do projeto coloco:
+cd ..
+E para criar o arquivo posso colocar:
+echo > docker-compose.yml
+
+E o conteúdo do arquivo está da mesma forma que no Dockerfile, onde eu comentei linha por linha para que tenha o entendimento de fato de tudo que estiver realizando.
+Conteúdo:
+version: '3.8'            # versão da linguagem Docker Compose
+
+services:                 # Aqui abro para começar a declarar os serviços
+
+  backend:                # Nome do nosso serviço backend
+    build: ./backend      # Diz de onde ele vai pegar o Dockerfile
+    ports:
+      - "3000:3000"       # Aqui estou declarando a porta externa e interna - no caso as duas são 3000
+    volumes:
+      - ./backend:/app    # Ele sincroniza os arquivos do meu PC com o container
+    depends_on:
+      - db
+
+  db:                     # Aqui vou colocar o serviço de banco de dados
+    image: postgres:15    # Imagem oficial do Postgres na versão 15
+    environment:          # Aqui vou definir as váriaveis de ambiente e colocando as configurações do banco de dados
+      POSTGRES_USER: postgres # Ususário do postgres
+      POSTGRES_PASSWORD: postgres # Senha do postgres
+      POSTGRES_DB: taskflow # Nome do banco do postgres
+    ports:
+      - "5432:5432"       # Coloquei a porta padrão do Postgres que é 5432
+    volumes:              # Precio deixar claro onde ele vai armazenar as informações
+      - pgdata:/var/lib/postgresql/data # Aqui de fato é onde vai ficar armazenada os dados
+
+volumes:
+  pgdata:                 # Aqui eu declarei onde vai ser utilizado o volume do banco
+
+Resumindo o que isso está fazendo:
+Você está subindo 2 containers:
+    Um para o seu app (Node.js)
+    Um para o banco (PostgresSQL)
+Eles estão se comunicando como se estivessem numa mesma rede privada
+E tudo é controlado por esse único arquivo
+
+4 Rodar tudo com Docker
+Após todas essas configurações, abra o Docker Desktop se estiver utilizando um windows, para que possa subir os containers (no meu caso precisei).
+Depois disso volte a raiz do projeto (taskflow) e rode o comando em que vamos subir os containers docker:
+docker compose up --build
+
+Agora uma preve explicação do que acontece quando rodamos esse comando:
+Docker lê o docker-compose.yml
+Contrói a imagem do backend
+Sobe o banco de dados
+Liga os dois serviços
+Você verá algo como:
+Server is running on port 3000
+Pois foi esse o log que criamos no idnex.js que aparecesse se o serviço estivesse ligado e funcionando
+
+Agora abra o seu navegador padrão (Ex: Google Chorme) e insira:
+http://localhost:3000/health
+E você verá na sua tela a mensagem que configuramos:
+API is healthy!
+

@@ -14,9 +14,9 @@ services:                 # Aqui abro para começar a declarar os serviços
   db:                     # Aqui vou colocar o serviço de banco de dados
     image: postgres:15    # Imagem oficial do Postgres na versão 15
     environment:          # Aqui vou definir as váriaveis de ambiente e colocando as configurações do banco de dados
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: taskflow
+      POSTGRES_USER: postgres # Ususário do postgres
+      POSTGRES_PASSWORD: postgres # Senha do postgres
+      POSTGRES_DB: taskflow # Nome do banco do postgres
     ports:
       - "5432:5432"       # Coloquei a porta padrão do Postgres que é 5432
     volumes:              # Precio deixar claro onde ele vai armazenar as informações
