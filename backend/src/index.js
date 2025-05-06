@@ -10,3 +10,8 @@ app.listen(PORT, () => {               // Iniciando o servidor
     console.log(`Server is running on port ${PORT}`);
 });
 
+require('dotenv').config();     // permite ler variaveis do arquivo .env
+app.use(express.json());        // permite ler o corpo JSON das requisições
+
+const authRoutes = require('./routes/auth');    //importa as rotas
+app.use('/auth', authRoutes);   // adiciona todas as rotas no caminho /auth
