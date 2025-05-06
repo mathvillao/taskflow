@@ -10,7 +10,7 @@ RUN npm install
 
 COPY . .                            
 # Aqui vai copiar todo projeto
-EXPOSE 300                          
-# Aqui vai expor a porta 300
+EXPOSE 3000                         
+# Aqui vai expor a porta 3000
 CMD [ "node", "src/index.js" ]
 # E por fim esse é o comando que roda a API
